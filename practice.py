@@ -40,6 +40,9 @@ def _get_character_pairs(text):
     results = dict()
 
     for word in text.upper().split():
+        '''This function is used for
+        splitting the word and making them in paid
+        '''
         for pair in [word[i]+word[i+1] for i in range(len(word)-1)]:
             if pair in results:
                 results[pair] += 1
