@@ -13,3 +13,5 @@ The source files should be in the same directory
 
 - [ ] Keep a track of number of times a word was revised
 - [ ] Number of tries it took to revise the word
+- [ ] Capitalise the word which is being revised during the sentence revision
+- [ ] Show the meaning of the word as well during the sentence revision
