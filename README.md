@@ -11,7 +11,7 @@ The source files should be in the same directory
 
 # TODO
 
-- [ ] Keep a track of number of times a word was revised
-- [ ] Number of tries it took to revise the word
+- [x] Keep a track of number of times a word was revised
+- [x] Number of tries it took to revise the word
 - [ ] Capitalise the word which is being revised during the sentence revision
-- [ ] Show the meaning of the word as well during the sentence revision
+- [x] Show the meaning of the word as well during the sentence revision
