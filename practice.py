@@ -187,7 +187,6 @@ def main():
         wordsList = []
         sentences = []  # Empty list to store sentences in it
         meanings = []  # To track all the meanings of the words which will be revised today
-        triesL = []  # To track number of tries for every single word
         for data in csvFile:  # Loop to get all the Words in the list
             if "Times Revision" in data:
                 pass
@@ -203,6 +202,7 @@ def main():
                 elif opt2 == 2:  # To revise all the words and not only for the day
                     try:
                         words.append(data)
+                        wordsList.append(data[0])
                         row_count += 1
                     except ValueError:
                         print "Error with entry : %s" % str(data[4])
@@ -212,56 +212,54 @@ def main():
             counter = 1  # Counter to see the number of words being revised
             if opt == 1:  # Checking which option has been choosen and countinuing with it
                 for num in randomList:  # Iterate through the random list
-                    print "Word learnt on : %s" % (str(words[num][4]).strip())
-                    print "%d. Meaning of the word : %s" % (counter, str(words[num][1]).strip())  # Print the meaning of the word
+                    print "\nWord learnt on : %s" % (str(words[num][4]).strip())
+                    print "\n%d. Meaning of the word : %s" % (counter, str(words[num][1]).strip())  # Print the meaning of the word
                     meanings.append(words[num][1])
                     while True:  # Start an infinite loop because we don't know how many tries the user will take to guess the correct word
                         try:
-                            word = str(raw_input("Word : "))  # Take an input for the word
+                            word = str(raw_input("\nWord : "))  # Take an input for the word
                         except ValueError:  # If a string value is not entered
                             print "Please enter a correct value."
                             continue
                         if str(word).strip() == str(words[num][0]).strip():  # If he enters the correct word
                             print "Correct. :)"  # Print that the word he entered was correct
                             system('say %s --voice=Samantha --rate=60' % str(words[num][0]))  # Make the computer say the word
-                            triesL.append(tries)
                             tries = 0  # Set the number of tries to 0
                             while True:
-                                sentence = raw_input("Make a sentence with the word : \n")  # Ask the user to make a sentence with the word
+                                sentence = raw_input("\nMake a sentence with the word : \n")  # Ask the user to make a sentence with the word
                                 sentence = sentence.lower()
                                 if word in sentence and len(sentence.split()) >= 2:  # Check if the user made a proper sentece or not
                                     sentences.append(sentence)
                                     break  # break the loop if he did
                                 elif len(sentence.split()) < 4:  # if the sentence is just a single word then of course it's not a legitimate sentence
-                                    print ("Make a proper sentence please.")
+                                    print ("\nMake a proper sentence please.")
                                 else:
                                     continue
                             break
                         else:
-                            print "The current word is "+str(round(float(compare_strings(str(word), str(words[num][0])))*100))+"% similar to the word entered. Try again."  # Asking user to try again if he hasn't guessed the right word
+                            print "\nThe current word is "+str(round(float(compare_strings(str(word), str(words[num][0])))*100))+"% similar to the word entered. Try again."  # Asking user to try again if he hasn't guessed the right word
                             tries += 1  # Augmented statement to keep adding the number of tries
                         if tries >= 5:  # If the tries are 5 or more than 5 then give a hint
-                            print "The first two letters of the word are %s" % words[num][0][:2]  # Printing the first letter of the word as a hint
+                            print "\nThe first two letters of the word are %s" % words[num][0][:2]  # Printing the first letter of the word as a hint
                     counter += 1
                     print "-" * 25
             else:
                 for num in randomList:  # Iterating through the random generated list
-                    print "Date of learning : %s" % (words[num][4])  # Printing the date of leaning
-                    print "%d. Word is : %s" % (counter, str(words[num][0]).strip())  # Print the word
-                    raw_input("Press Enter to continue.")  # Ask user to press enter to reveal the meaning
+                    print "\nDate of learning : %s" % (words[num][4])  # Printing the date of leaning
+                    print "\n%d. Word is : %s" % (counter, str(words[num][0]).strip())  # Print the word
+                    raw_input("\nPress Enter to continue.")  # Ask user to press enter to reveal the meaning
                     system('say %s --voice=Samantha --rate=60' % str(words[num][0]))  # Make the computer say the word
-                    print "Meaning of the word : %s" % (str(words[num][1]).strip())  # Print the meaning of the word
-                    raw_input("Press Enter for the next word.")  # Asking enter to continue
+                    print "\nMeaning of the word : %s" % (str(words[num][1]).strip())  # Print the meaning of the word
+                    raw_input("\nPress Enter for the next word.")  # Asking enter to continue
                     print "-" * 25
                     counter += 1  # Augmented statement to keep the counter running
-            print "Done for the day."
+            print "\nDone for the day."
             openFile = open(sys.argv[1], 'rb')  # Take the file in command line argument
             csvFile = csv.reader(openFile, delimiter='\t')  # Read the file as a CSV
             system("rm "+sys.argv[1])  # Remove the file
             with open(sys.argv[1], 'a') as openNFile:  # Open a new file with the same name
                 nCSV = csv.writer(openNFile, delimiter = '\t')
                 for data in csvFile:
-
                     if data[0] in wordsList:
                         data[3] = int(data[3]) + 1
                     nCSV.writerow(data)
@@ -269,16 +267,14 @@ def main():
             if opt == 1:
                 raw_input("Press Enter to read the sentences.")
                 print "-" * 25
-                count = 0
                 for data in sentences:
                     print str(counter) + ". " + data
-                    print "Meaning: " + meanings[count]
-                    print "Number of tries it took: " + str(triesL[count])
+                    print "Meaning: " + meanings[counter - 1]
                     raw_input()
                     print "-" * 25
                     counter += 1
             sleep(1)  # Making the program sleep for 5 seconds
-            raw_input("Press Enter to end the program.")
+            raw_input("\nPress Enter to end the program.")
             exit(0)  # Exit after it's done
         else:
             print "No words for the day."  # There is nothing to revise
