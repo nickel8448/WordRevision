@@ -219,7 +219,7 @@ def main():
                     meanings.append(words[num][1])
                     while True:  # Start an infinite loop because we don't know how many tries the user will take to guess the correct word
                         try:
-                            word = str(raw_input("\nWord : "))  # Take an input for the word
+                            word = str(raw_input("Word : "))  # Take an input for the word
                         except ValueError:  # If a string value is not entered
                             print "Please enter a correct value."
                             continue
