@@ -109,7 +109,10 @@ def timeaddition(date, numdays):
     :param numdays: int
     :return: True or False
     """
-    if (datetime.datetime.strptime(date, "%d/%m/%Y") + datetime.timedelta(days=int(numdays))).strftime("%d/%m/%Y") == datetime.datetime.today().strftime("%d/%m/%Y"):  # Adding number of days to the date and checking if today's date matches with it
+    date = datetime.datetime.strptime(date, "%d/%m/%Y")
+    dateDelta = datetime.timedelta(days=int(numdays)).strftime("%d/%m/%Y")
+    dateAddition = date + dateDelta
+    if dateAddition == datetime.datetime.today().strftime("%d/%m/%Y"):
         return True
     else:
         return False
@@ -124,33 +127,41 @@ def option():
     while True:
         try:
             opt3 = int(raw_input("Enter 1 to revise or 2 to add words: "))
-            if opt3 == 1 or opt3 == 2:  # Checking if he has given correct option
+            if opt3 == 1 or opt3 == 2:
+                # Checking if he has given correct option
                 opt, opt2 = 0, 0
                 break
             else:
                 continue
-        except ValueError:  # if an error is occured then an exception will be thrown
+        except ValueError:
+            # if an error is occured then an exception will be thrown
             print "Please enter either 1 or 2."
             continue
     if opt3 == 1:
-        while True:  # True to keep running the loop till the user gives correct input
+        # True to keep running the loop till the user gives correct input
+        while True:
             try:
-                opt = int(raw_input("Enter 1 to revise meanings or 2 to revise words: "))  # Giving the user an option
-                if opt == 1 or opt == 2:  # Checking if he has given correct option
+                msg = "Enter 1 to revise meanings or 2 to revise words: "
+                opt = int(raw_input(msg))  # Giving the user an option
+                if opt == 1 or opt == 2:  # Checking the options
                     break
                 else:
                     continue
-            except ValueError:  # if an error is occured then an exception will be thrown
+            # if an error is occured then an exception will be thrown
+            except ValueError:
                 print "Please enter either 1 or 2."
                 continue
-        while True:  # True to keep running the loop till the user gives correct input
+        while True:  # To keep running the loop till the user gives correct input
             try:
-                opt2 = int(raw_input("Enter 1 to revise for the day or 2 to all: "))  # Giving the user an option
-                if opt2 == 1 or opt2 == 2:  # Checking if he has given correct option
+                msg = "Enter 1 to revise for the day or 2 to all: "
+                opt2 = int(raw_input(msg))  # Giving the user an option
+                # Checking if he has given correct option
+                if opt2 == 1 or opt2 == 2:
                     break
                 else:
                     continue
-            except ValueError:  # if an error is occured then an exception will be thrown
+            # if an error is occured then an exception will be thrown
+            except ValueError:
                 print "Please enter either 1 or 2."
                 continue
     return opt, opt2, opt3
@@ -166,11 +177,12 @@ def writeWords(csvfile):
         word = str(raw_input("Enter word " + str(int(num + 1)) + ": ")).lower()
         meaning = str(raw_input("Enter the meaning for " + str(word) + ": ")).lower()
         sentence = str(raw_input("Enter sample sentence for " + str(word) + ": "))
-        print ("-"*25)
-        if (num == 0):
-            row = ["\n"+word, meaning, sentence, 0, datetime.datetime.today().strftime("%d/%m/%Y")]
+        print "-" * 25
+        today = datetime.datetime.today().strftime("%d/%m/%Y")
+        if num == 0:
+            row = ["\n"+word, meaning, sentence, 0, today]
         else:
-            row = [word, meaning, sentence, 0, datetime.datetime.today().strftime("%d/%m/%Y")]
+            row = [word, meaning, sentence, 0, today]
         csvfile.writerow(row)
 
 
@@ -181,86 +193,129 @@ def main():
     """
     opt, opt2, opt3 = option()
     if opt3 == 1:
-        openFile = open(sys.argv[1], 'rb')  # Take the file in command line argument
-        csvFile = csv.reader(openFile, delimiter='\t')  # Read the file as a CSV
+        # Take the file in command line argument
+        openFile = open(sys.argv[1], 'rb')
+        # Read the file as a CSV
+        csvFile = csv.reader(openFile, delimiter='\t')
         row_count = 0  # A variable to count the number of rows in the CSV
         words = []  # Empty list to get the words in it
         wordsList = []
         sentences = []  # Empty list to store sentences in it
-        meanings = []  # To track all the meanings of the words which will be revised today
+        meanings = []  # Track the meanings of the words to be revised today
         for data in csvFile:  # Loop to get all the Words in the list
             if "Times Revision" in data:
                 pass
             else:
                 if opt2 == 1:
                     try:
-                        if timeaddition(data[4], 2) or timeaddition(data[4], 3) or timeaddition(data[4], 5) or timeaddition(data[4], 7) or timeaddition(data[4], 15) or timeaddition(data[4], 10) or timeaddition(data[4], 20) or timeaddition(data[4], 40) or timeaddition(data[4], 50) or timeaddition(data[4], 30) or timeaddition(data[4], 60) or timeaddition(data[4], 90) or timeaddition(data[4], 120) or timeaddition(data[4], 150):  # Checking which words to revise today
-                            words.append(data)  # Add the words to the list which are required to be studied today
+                        # Checking which words to revise today
+                        if (timeaddition(data[4], 2) or
+                                timeaddition(data[4], 3) or
+                                timeaddition(data[4], 5) or
+                                timeaddition(data[4], 7) or
+                                timeaddition(data[4], 15) or
+                                timeaddition(data[4], 10) or
+                                timeaddition(data[4], 20) or
+                                timeaddition(data[4], 40) or
+                                timeaddition(data[4], 50) or
+                                timeaddition(data[4], 30) or
+                                timeaddition(data[4], 60) or
+                                timeaddition(data[4], 90) or
+                                timeaddition(data[4], 120) or
+                                timeaddition(data[4], 150)):
+                            words.append(data)  # Add the words to the list
                             wordsList.append(data[0])
-                            row_count += 1  # Augmented statement to keep adding the number of rows
+                            # Augmented statement to count rows
+                            row_count += 1
                     except ValueError:
                         print "Error with entry : %s" % str(data[4])
-                elif opt2 == 2:  # To revise all the words and not only for the day
+                # To revise all the words and not only for the day
+                elif opt2 == 2:
                     try:
                         words.append(data)
                         wordsList.append(data[0])
                         row_count += 1
                     except ValueError:
                         print "Error with entry : %s" % str(data[4])
-        randomList = random.sample(range(row_count), row_count)  # sample will get unique elements for the list
+        # sample will get unique elements for the list
+        randomList = random.sample(range(row_count), row_count)
         if words != []:  # If the words list is not empty then go to the loop
             tries = 1  # A variable to count the number of tries
             counter = 1  # Counter to see the number of words being revised
-            if opt == 1:  # Checking which option has been choosen and countinuing with it
-                for num in randomList:  # Iterate through the random list
-                    print 
+            # Checking which option has been choosen and countinuing with it
+            if opt == 1:
+                for num in randomList:# Iterate through the random list
                     print "Word learnt on : %s" % (str(words[num][4]).strip())
-                    print "%d. Meaning of the word : %s" % (counter, str(words[num][1]).strip())  # Print the meaning of the word
+                    tempWord = str(words[num][1]).strip()
+                    # Print the meaning of the word
+                    print "%d. Meaning of the word : %s" % (counter, tempWord)
                     meanings.append(words[num][1])
-                    while True:  # Start an infinite loop because we don't know how many tries the user will take to guess the correct word
+                    while True:  # Start an infinite loop for tries
                         try:
-                            word = str(raw_input("Word : "))  # Take an input for the word
+                            # Take an input for the word
+                            word = str(raw_input("Word : "))
                         except ValueError:  # If a string value is not entered
                             print "Please enter a correct value."
                             continue
-                        if str(word).strip() == str(words[num][0]).strip():  # If he enters the correct word
-                            print "Correct. :)"  # Print that the word he entered was correct
-                            system('say %s --voice=Samantha --rate=60' % str(words[num][0]))  # Make the computer say the word
+                        # If he enters the correct word
+                        if str(word).strip() == str(words[num][0]).strip():
+                            print "Correct. :)"
+                            cmd = 'say %s --voice=Samantha --rate=60'
+                            tempWord = str(words[num][0])
+                            system(cmd % tempWord)  # Pronounce the word
                             tries = 0  # Set the number of tries to 0
                             while True:
-                                sentence = raw_input("Make a sentence with the word : \n")  # Ask the user to make a sentence with the word
+                                msg = "Make a sentence with the word : \n"
+                                # To make a sentence with the word
+                                sentence = raw_input(msg)
                                 sentence = sentence.lower()
-                                if word in sentence and len(sentence.split()) >= 2:  # Check if the user made a proper sentece or not
+                                # Check if it's a proper sentece or not
+                                if (word in sentence and
+                                        len(sentence.split()) >= 2):
                                     sentences.append(sentence)
                                     break  # break the loop if he did
-                                elif len(sentence.split()) < 4:  # if the sentence is just a single word then of course it's not a legitimate sentence
-                                    print ("Make a proper sentence please.")
+                                elif len(sentence.split()) < 4:
+                                    print "Make a proper sentence please."
                                 else:
                                     continue
                             break
                         else:
-                            print "The current word is "+str(round(float(compare_strings(str(word), str(words[num][0])))*100))+"% similar to the word entered. Try again."  # Asking user to try again if he hasn't guessed the right word
+                            cword = round(float(compare_strings(str(word))))
+                            # Try again if he hasn't guessed the right word
+                            msg = """The current word is %s
+                                    % similar to the word entered."""
+                            print msg % str(cword, str(words[num][0]))*100
                             tries += 1  # Augmented statement to keep adding the number of tries
-                        if tries >= 5:  # If the tries are 5 or more than 5 then give a hint
-                            print "The first two letters of the word are %s" % words[num][0][:2]  # Printing the first letter of the word as a hint
+                        # If the tries are 5 or more than 5 then give a hint
+                        if tries >= 5:
+                            msg = "The first two letters of the word are %s"
+                            # Printing the first letter of the word as a hint
+                            print msg % words[num][0][:2]
                     counter += 1
                     print "-" * 25
             else:
                 for num in randomList:  # Iterating through the random generated list
-                    print "Date of learning : %s" % (words[num][4])  # Printing the date of leaning
-                    print "%d. Word is : %s" % (counter, str(words[num][0]).strip())  # Print the word
-                    raw_input("Press Enter to continue.")  # Ask user to press enter to reveal the meaning
-                    system('say %s --voice=Samantha --rate=60' % str(words[num][0]))  # Make the computer say the word
-                    print "Meaning of the word : %s" % (str(words[num][1]).strip())  # Print the meaning of the word
-                    raw_input("Press Enter for the next word.")  # Asking enter to continue
+                    # Printing the date of leaning
+                    print "Date of learning : %s" % (words[num][4])
+                    tmpword = str(words[num][0]).strip()
+                    # Print the word
+                    print "%d. Word is : %s" % (counter, tmpword)
+                    raw_input("Press Enter to continue.")
+                    pronword = str(words[num][0])  # Word to pronounce
+                    system('say %s --voice=Samantha --rate=60' % pronword)
+                    pronmean = str(words[num][1]).strip()
+                    print "Meaning of the word : %s" % (pronmean)
+                    raw_input("Press Enter for the next word.")
                     print "-" * 25
                     counter += 1  # Augmented statement to keep the counter running
             print "Done for the day."
-            openFile = open(sys.argv[1], 'rb')  # Take the file in command line argument
-            csvFile = csv.reader(openFile, delimiter='\t')  # Read the file as a CSV
+            # Take the file in command line argument
+            openFile = open(sys.argv[1], 'rb')
+            csvFile = csv.reader(openFile, delimiter='\t')
             system("rm "+sys.argv[1])  # Remove the file
-            with open(sys.argv[1], 'a') as openNFile:  # Open a new file with the same name
-                nCSV = csv.writer(openNFile, delimiter = '\t')
+            # Open a new file with the same name
+            with open(sys.argv[1], 'a') as openNFile:
+                nCSV = csv.writer(openNFile, delimiter='\t')
                 for data in csvFile:
                     if data[0] in wordsList:
                         data[3] = int(data[3]) + 1
@@ -283,7 +338,7 @@ def main():
             sleep(15)
     else:
         with open(sys.argv[1], 'a') as openFile:
-            openCSV = csv.writer(openFile, delimiter = '\t')
+            openCSV = csv.writer(openFile, delimiter='\t')
             writeWords(openCSV)
     exit(0)
 
