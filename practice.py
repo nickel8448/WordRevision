@@ -109,10 +109,7 @@ def timeaddition(date, numdays):
     :param numdays: int
     :return: True or False
     """
-    date = datetime.datetime.strptime(date, "%d/%m/%Y")
-    dateDelta = datetime.timedelta(days=int(numdays)).strftime("%d/%m/%Y")
-    dateAddition = date + dateDelta
-    if dateAddition == datetime.datetime.today().strftime("%d/%m/%Y"):
+    if (datetime.datetime.strptime(date, "%d/%m/%Y") + datetime.timedelta(days=int(numdays))).strftime("%d/%m/%Y") == datetime.datetime.today().strftime("%d/%m/%Y"):  # Adding number of days to the date and checking if today's date matches with it
         return True
     else:
         return False
@@ -280,11 +277,10 @@ def main():
                                     continue
                             break
                         else:
-                            cword = round(float(compare_strings(str(word))))
+                            cword = compare_strings(str(word), str(words[num][0]))
                             # Try again if he hasn't guessed the right word
-                            msg = """The current word is %s
-                                    % similar to the word entered."""
-                            print msg % str(cword, str(words[num][0]))*100
+                            msg = "The current word is %s percent similar to the word entered."""
+                            print msg % str(round(float((cword)*100)))
                             tries += 1  # Augmented statement to keep adding the number of tries
                         # If the tries are 5 or more than 5 then give a hint
                         if tries >= 5:
