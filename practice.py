@@ -176,10 +176,9 @@ def writeWords(csvfile):
         sentence = str(raw_input("Enter sample sentence for " + str(word) + ": "))
         print "-" * 25
         today = datetime.datetime.today().strftime("%d/%m/%Y")
-        if num == 0:
-            row = ["\n"+word, meaning, sentence, 0, today]
-        else:
-            row = [word, meaning, sentence, 0, today]
+        # if num == 0:
+        #     csvfile.writerow([])
+        row = [word, meaning, sentence, 0, today]
         csvfile.writerow(row)
 
 
