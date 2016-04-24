@@ -8,6 +8,12 @@ from os import path  # to know if the file exists on the system or not
 from time import sleep  # to make the program pause
 
 
+class bcolors:
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    ENDC = '\033[0m'
+
+
 def _get_character_pairs(text):
     """Returns a defaultdict(int) of adjacent character pair counts.
 
@@ -172,8 +178,12 @@ def writeWords(csvfile):
         print "Please enter an integer value only."
     for num in range(0, maxnum):
         word = str(raw_input("Enter word " + str(int(num + 1)) + ": ")).lower()
-        meaning = str(raw_input("Enter the meaning for " + str(word) + ": ")).lower()
-        sentence = str(raw_input("Enter sample sentence for " + str(word) + ": "))
+        meaning = str(raw_input(
+            "Enter the meaning for " + str(word) + ": ")
+        ).lower()
+        sentence = str(raw_input(
+            "Enter sample sentence for " + str(word) + ": ")
+        )
         print "-" * 25
         today = datetime.datetime.today().strftime("%d/%m/%Y")
         # if num == 0:
@@ -258,7 +268,7 @@ def main():
                             print "Correct. :)"
                             cmd = 'say %s --voice=Samantha --rate=60'
                             tempWord = str(words[num][0])
-                            system(cmd % tempWord)  # Pronounce the word
+                            system(cmd % tempWord)  # Say the word
                             tries = 0  # Set the number of tries to 0
                             while True:
                                 msg = "Make a sentence with the word : \n"
@@ -269,6 +279,10 @@ def main():
                                 if (word in sentence and
                                         len(sentence.split()) >= 2):
                                     sentences.append(sentence)
+                                    print ("Sample sentence : \n" +
+                                        bcolors.OKGREEN +
+                                        words[num][2] +
+                                        bcolors.ENDC)
                                     break  # break the loop if he did
                                 elif len(sentence.split()) < 4:
                                     print "Make a proper sentence please."
@@ -278,7 +292,7 @@ def main():
                         else:
                             cword = compare_strings(str(word), str(words[num][0]))
                             # Try again if he hasn't guessed the right word
-                            msg = "The current word is %s percent similar to the word entered."""
+                            msg = "The current word is %s percent similar to the word entered."
                             print msg % str(round(float((cword)*100)))
                             tries += 1  # Augmented statement to keep adding the number of tries
                         # If the tries are 5 or more than 5 then give a hint
